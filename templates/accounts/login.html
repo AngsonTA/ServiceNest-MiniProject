@@ -1,56 +1,566 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 
+<style>
+/* Modern Login Page Styles */
+.login-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
+    background-size: cover;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.modern-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: none;
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Verification Message Styles */
+.verification-card {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 2px solid #10b981;
+    color: #065f46;
+    text-align: center;
+}
+
+.verification-icon {
+    font-size: 4rem;
+    color: #10b981;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.verification-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #065f46;
+    margin-bottom: 1rem;
+}
+
+.verification-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #047857;
+    margin-bottom: 2rem;
+}
+
+.email-highlight {
+    background: rgba(16, 185, 129, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 700;
+    color: #065f46;
+    font-family: 'Courier New', monospace;
+}
+
+.verification-login-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.verification-login-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* Login Form Styles */
+.card-header-modern {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.card-header-modern::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 20px;
+    background: inherit;
+    border-radius: 0 0 50px 50px;
+}
+
+.login-icon {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.card-title-modern {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+    font-weight: 400;
+}
+
+.card-body-modern {
+    padding: 2.5rem 2rem 2rem;
+}
+
+.modern-form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.modern-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-weight: 500;
+}
+
+.modern-input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1.1rem;
+    z-index: 1;
+    transition: color 0.3s ease;
+}
+
+.modern-input:focus + .input-icon {
+    color: #6366f1;
+}
+
+.forgot-password-section {
+    text-align: right;
+    margin-bottom: 1.5rem;
+}
+
+.forgot-password-link {
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.forgot-password-link:hover {
+    color: #4f46e5;
+    background: rgba(99, 102, 241, 0.1);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.modern-btn {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.modern-btn:hover::before {
+    left: 100%;
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+.bottom-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bottom-link-text {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.bottom-link a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.bottom-link a:hover {
+    color: #f59e0b;
+    background: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.welcome-message {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    border: 1px solid #f59e0b;
+}
+
+.welcome-text {
+    color: #92400e;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-page {
+        padding: 1rem 0;
+    }
+    
+    .login-container {
+        padding: 0 0.75rem;
+    }
+    
+    .card-header-modern {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .card-body-modern {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .login-icon, .verification-icon {
+        font-size: 3rem;
+    }
+    
+    .card-title-modern, .verification-title {
+        font-size: 1.75rem;
+    }
+    
+    .modern-input {
+        padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+    }
+    
+    .input-icon {
+        left: 0.875rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-header-modern {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .card-body-modern {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .login-icon, .verification-icon {
+        font-size: 2.5rem;
+    }
+    
+    .card-title-modern, .verification-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Loading animation for form submission */
+.modern-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.modern-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 <!-- ========================= SECTION CONTENT ========================= -->
-<section class="section-conten padding-y" style="min-height:84vh">
-
-
-{% if request.GET.command == 'verification' %}
-
-<div class="container mx-auto alert alert-info text-center" role="alert" style="max-width: 600px; margin-top:100px;">
-
-Thank you for registering with us. we have sent a verification link to your email address [{{ request.GET.email }}] Please click on the link.
-<br><br>
-Already verified? <a href="{% url 'login' %}">Login</a>
-
-</div>
-
-{% else %}
-
-<!-- ============================ COMPONENT LOGIN   ================================= -->
-	<div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
-   
-        <div class="card-body">
-      <h4 class="card-title mb-4">Sign in</h4>
-         {% include 'includes/alerts.html' %}
-      <form action="{% url 'login' %}" method="POST">
-        {% csrf_token %}
-          <div class="form-group">
-			 <input type="email" class="form-control" placeholder="Email Address" name="email" >
-          </div> <!-- form-group// -->
-          <div class="form-group">
-			<input type="password" class="form-control" placeholder="Password" name="password" >
-          </div> <!-- form-group// -->
-          
-          <div class="form-group">
-          	<a href="{% url 'forgotPassword' %}" class="float-right">Forgot password?</a> 
-           
-          </div> <!-- form-group form-check .// -->
-          <div class="form-group">
-              <button type="submit" class="btn btn-warning btn-block"> Login  </button>
-          </div> <!-- form-group// -->    
-      </form>
-      </div> <!-- card-body.// -->
-    </div> <!-- card .// -->
-
-     <p class="text-center mt-4">Don't have account? <a href="{% url 'register' %}">Sign up</a></p>
-     <br><br>
-<!-- ============================ COMPONENT LOGIN  END.// ================================= -->
-
-{% endif %}
+<section class="login-page">
+    <div class="login-container">
+        {% if request.GET.command == 'verification' %}
+        
+        <!-- Verification Message -->
+        <div class="modern-card verification-card">
+            <div style="padding: 2.5rem 2rem;">
+                <div class="verification-icon">
+                    <i class="fas fa-envelope-circle-check"></i>
+                </div>
+                <h1 class="verification-title">Check Your Email!</h1>
+                <div class="verification-message">
+                    <p>Thank you for registering with us! We've sent a verification link to:</p>
+                    <p><span class="email-highlight">{{ request.GET.email }}</span></p>
+                    <p>Please click on the verification link in your email to activate your account.</p>
+                </div>
+                <p style="color: #047857; margin-bottom: 2rem; font-weight: 500;">
+                    <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                    Already verified your email?
+                </p>
+                <a href="{% url 'login' %}" class="verification-login-link">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In Now
+                </a>
+            </div>
+        </div>
+        
+        {% else %}
+        
+        <!-- Login Form -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <div class="login-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h1 class="card-title-modern">Welcome Back</h1>
+                <p class="card-subtitle">Sign in to your account</p>
+            </div>
+            
+            <div class="card-body-modern">
+                <div class="welcome-message">
+                    <p class="welcome-text">
+                        <i class="fas fa-star" style="color: #f59e0b; margin-right: 0.5rem;"></i>
+                        Welcome back! We're glad to see you again
+                    </p>
+                </div>
+                
+                {% include 'includes/alerts.html' %}
+                
+                <form action="{% url 'login' %}" method="POST" id="loginForm">
+                    {% csrf_token %}
+                    
+                    <div class="modern-form-group">
+                        <input type="email" 
+                               class="modern-input" 
+                               placeholder="Enter your email address" 
+                               name="email" 
+                               required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                    
+                    <div class="modern-form-group">
+                        <input type="password" 
+                               class="modern-input" 
+                               placeholder="Enter your password" 
+                               name="password" 
+                               required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                    
+                    <div class="forgot-password-section">
+                        <a href="{% url 'forgotPassword' %}" class="forgot-password-link">
+                            <i class="fas fa-key"></i> Forgot Password?
+                        </a>
+                    </div>
+                    
+                    <div class="modern-form-group">
+                        <button type="submit" class="modern-btn" id="loginBtn">
+                            <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem;"></i>
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="bottom-link">
+            <p class="bottom-link-text">
+                Don't have an account? 
+                <a href="{% url 'register' %}">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </p>
+        </div>
+        
+        {% endif %}
+    </div>
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    
+    // Form submission with loading state
+    if (loginForm && loginBtn) {
+        loginForm.addEventListener('submit', function() {
+            loginBtn.classList.add('loading');
+            loginBtn.innerHTML = '<span style="opacity: 0;">Sign In</span>';
+        });
+    }
+    
+    // Input focus animations
+    document.querySelectorAll('.modern-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            const icon = this.parentNode.querySelector('.input-icon');
+            if (icon) {
+                icon.style.transform = 'translateY(-50%) scale(1.1)';
+                icon.style.color = '#6366f1';
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            const icon = this.parentNode.querySelector('.input-icon');
+            if (icon) {
+                icon.style.transform = 'translateY(-50%) scale(1)';
+                icon.style.color = '#6b7280';
+            }
+        });
+    });
+    
+    // Email validation
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const email = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email && !emailRegex.test(email)) {
+                this.style.borderColor = '#ef4444';
+                this.style.background = '#fef2f2';
+            } else if (email && emailRegex.test(email)) {
+                this.style.borderColor = '#22c55e';
+                this.style.background = '#f0fdf4';
+            } else {
+                this.style.borderColor = '#e2e8f0';
+                this.style.background = '#f8fafc';
+            }
+        });
+    }
+});
+</script>
 
 {% endblock %}

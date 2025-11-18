@@ -1,32 +1,414 @@
-<!-- ========================= FOOTER ========================= -->
-<footer class="section-footer border-top">
-	<div class="container">
-		<section class="footer-bottom border-top row">
-			<div class="col-md-2">
-				<p class="text-muted"> &copy 2019 Company name </p>
-			</div>
-			<div class="col-md-8 text-md-center">
-				<span  class="px-2">info@pixsellz.io</span>
-				<span  class="px-2">+879-332-9375</span>
-				<span  class="px-2">Street name 123, Avanue abc</span>
-			</div>
-			<div class="col-md-2 text-md-right text-muted">
-				<i class="fab fa-lg fa-cc-visa"></i>
-				<i class="fab fa-lg fa-cc-paypal"></i>
-				<i class="fab fa-lg fa-cc-mastercard"></i>
-			</div>
-		</section>
-	</div><!-- //container -->
+<!-- ========================= MODERN FOOTER ========================= -->
+<footer class="modern-footer">
+    <style>
+        /* Modern Footer Styles */
+        .modern-footer {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: #e5e7eb;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+        }
+        
+        .footer-content {
+            padding: 3rem 0 2rem;
+        }
+        
+        .footer-section {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h5 {
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+        }
+        
+        .contact-info {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-info li:hover {
+            color: #6366f1;
+        }
+        
+        .contact-info i {
+            width: 20px;
+            margin-right: 0.75rem;
+            color: #6366f1;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            color: #6366f1;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .social-link:hover {
+            background: #6366f1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            text-decoration: none;
+        }
+        
+        .app-downloads {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .app-store-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .app-store-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        .app-store-btn i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+        
+        .app-store-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-store-text small {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        
+        .app-store-text span {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .payment-icon {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .payment-icon i {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .footer-bottom {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #6366f1;
+            text-decoration: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .footer-content {
+                padding: 2rem 0 1.5rem;
+            }
+            
+            .footer-section {
+                text-align: center;
+                margin-bottom: 2.5rem;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+            
+            .payment-methods {
+                justify-content: center;
+            }
+            
+            .app-downloads {
+                align-items: center;
+            }
+            
+            .footer-links {
+                gap: 1rem;
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .footer-content {
+                padding: 1.5rem 0 1rem;
+            }
+            
+            .social-links {
+                gap: 0.75rem;
+            }
+            
+            .social-link {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .payment-methods {
+                gap: 0.5rem;
+            }
+            
+            .payment-icon {
+                padding: 0.4rem 0.6rem;
+            }
+            
+            .payment-icon i {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <div class="footer-content">
+            <div class="row">
+                <!-- Contact Information -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h5><i class="fas fa-store"></i> Contact Info</h5>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            angsontheekan@gmail.com
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            +91 7306 616 332
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            Kerala,India
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            24/7 Customer Support
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h5><i class="fas fa-share-alt"></i> Follow Us</h5>
+                    <p>Stay connected with us on social media for updates and offers!</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Apps -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h5><i class="fas fa-mobile-alt"></i> Mobile Apps</h5>
+                    <p>Download our app for the best shopping experience!</p>
+                    <div class="app-downloads">
+                        <a href="#" class="app-store-btn">
+                            <i class="fab fa-google-play"></i>
+                            <div class="app-store-text">
+                                <small>Get it on</small>
+                                <span>Google Play</span>
+                            </div>
+                        </a>
+                        <a href="#" class="app-store-btn">
+                            <i class="fab fa-apple"></i>
+                            <div class="app-store-text">
+                                <small>Download on the</small>
+                                <span>App Store</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h5><i class="fas fa-credit-card"></i> We Accept</h5>
+                    <p>Secure payment methods available</p>
+                    <div class="payment-methods">
+                        <div class="payment-icon" title="Visa">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="payment-icon" title="Mastercard">
+                            <i class="fab fa-cc-mastercard"></i>
+                        </div>
+                        <div class="payment-icon" title="PayPal">
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                        <div class="payment-icon" title="American Express">
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div class="payment-icon" title="Discover">
+                            <i class="fab fa-cc-discover"></i>
+                        </div>
+                        <div class="payment-icon" title="Apple Pay">
+                            <i class="fab fa-cc-apple-pay"></i>
+                        </div>
+                        <div class="payment-icon" title="Google Pay">
+                            <i class="fab fa-google-pay"></i>
+                        </div>
+                        <div class="payment-icon" title="Amazon Pay">
+                            <i class="fab fa-amazon-pay"></i>
+                        </div>
+                        <div class="payment-icon" title="Stripe">
+                            <i class="fab fa-cc-stripe"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <p class="copyright">&copy; 2025 Angson T A . All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                        <a href="#">Return Policy</a>
+                        <a href="#">Shipping Info</a>
+                        <a href="#">Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
-<!-- ========================= FOOTER END // ========================= -->
+<!-- ========================= MODERN FOOTER END // ========================= -->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-	$(document).ready(function(){
-		$('.thumb a').click(function(e){
-			e.preventDefault();
-			$('.mainImage img').attr('src', $(this).attr("href"));
-		})
-	})
+    $(document).ready(function(){
+        $('.thumb a').click(function(e){
+            e.preventDefault();
+            $('.mainImage img').attr('src', $(this).attr("href"));
+        })
+        
+        // Add some interactive effects for footer
+        $('.social-link, .app-store-btn, .payment-icon').hover(
+            function() {
+                $(this).css('transform', 'translateY(-2px)');
+            },
+            function() {
+                $(this).css('transform', 'translateY(0)');
+            }
+        );
+    })
 </script>
 
 </body>

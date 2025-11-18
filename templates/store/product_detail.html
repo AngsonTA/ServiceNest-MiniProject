@@ -2,196 +2,799 @@
 {% load static %}
 
 {% block content %}
+<style>
 
+/* Modern Form Container */
+.modern-product-form {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 24px;
+    padding: 0;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+.modern-product-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+    z-index: 1;
+}
+
+/* Form Header Section */
+.form-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 2.5rem 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+}
+
+.product-title {
+    font-size: 1.5rem; /* Reduced from 2rem */
+    font-weight: 700; /* Reduced from 800 */
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.rating-stars i {
+    color: #fbbf24;
+    font-size: 1rem; /* Reduced from 1.25rem */
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.rating-stars i.fa-star-o,
+.rating-stars i.fa-star-half-o {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.review-count {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    font-size: 0.9rem; /* Added smaller font size */
+}
+
+.product-price-header {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    display: inline-block;
+    font-size: 1.5rem; /* Reduced from 2rem */
+    font-weight: 800; /* Reduced from 900 */
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+/* Form Body */
+.form-body {
+    padding: 2.5rem;
+}
+
+.product-description {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    border-left: 4px solid #6366f1;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem; /* Reduced from 1.1rem */
+    line-height: 1.6; /* Reduced from 1.7 */
+    color: #475569;
+    position: relative;
+}
+
+.product-description::before {
+    content: '"';
+    font-size: 3rem; /* Reduced from 4rem */
+    color: rgba(99, 102, 241, 0.2);
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    font-family: Georgia, serif;
+}
+
+/* Modern Divider */
+.modern-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    border: none;
+    margin: 2.5rem 0;
+    position: relative;
+}
+
+.modern-divider::after {
+    content: '⚡';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0.5rem;
+    font-size: 0.9rem; /* Reduced from 1rem */
+    color: #6366f1;
+}
+
+/* Modern Option Cards */
+.option-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.option-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.option-card:hover {
+    transform: translateY(-2px);
+    border-color: #6366f1;
+    box-shadow: 0 12px 25px rgba(99, 102, 241, 0.15);
+}
+
+.option-card:hover::before {
+    transform: scaleX(1);
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem; /* Reduced from 1.1rem */
+    font-weight: 600; /* Reduced from 700 */
+    color: #1e293b;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.option-icon {
+    width: 2.2rem; /* Reduced from 2.5rem */
+    height: 2.2rem; /* Reduced from 2.5rem */
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem; /* Reduced from 1.2rem */
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Modern Select Styling */
+.modern-select {
+    position: relative;
+    width: 100%;
+}
+
+.modern-select select {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.9rem; /* Reduced from 1rem */
+    font-weight: 500;
+    color: #1e293b;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+}
+
+.modern-select select:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-select select:hover {
+    border-color: #8b5cf6;
+    background: white;
+}
+
+.modern-select::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #6366f1;
+    pointer-events: none;
+    transition: transform 0.3s ease;
+}
+
+.modern-select select:focus + .modern-select::after,
+.modern-select:hover::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Ultra Modern Button */
+.ultra-modern-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    padding: 1.25rem 2.5rem; /* Reduced padding */
+    border-radius: 16px;
+    font-size: 1rem; /* Reduced from 1.2rem */
+    font-weight: 600; /* Reduced from 700 */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem; /* Reduced gap */
+    margin: 2.5rem auto 0;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Reduced from 0.1em */
+    position: relative;
+    overflow: hidden;
+}
+
+.ultra-modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.ultra-modern-btn:hover::before {
+    left: 100%;
+}
+
+.ultra-modern-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+}
+
+.ultra-modern-btn:active {
+    transform: translateY(-1px) scale(1.01);
+}
+
+.ultra-modern-btn i {
+    font-size: 1.1rem; /* Reduced from 1.3rem */
+    transition: transform 0.3s ease;
+}
+
+.ultra-modern-btn:hover i {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Pulse Animation */
+.pulse {
+    animation: modernPulse 2s infinite;
+}
+
+@keyframes modernPulse {
+    0%, 100% {
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6), 0 0 0 10px rgba(99, 102, 241, 0.1);
+    }
+}
+
+/* Out of Stock Modern Style */
+.modern-out-of-stock {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px solid #f87171;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-out-of-stock::before {
+    content: '⚠️';
+    font-size: 2.5rem; /* Reduced from 3rem */
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    opacity: 0.1;
+    transform: rotate(15deg);
+}
+
+.modern-out-of-stock h5 {
+    color: #dc2626;
+    font-size: 1.25rem; /* Reduced from 1.5rem */
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-header {
+        padding: 2rem 1.5rem 1rem;
+    }
+    
+    .product-title {
+        font-size: 1.25rem; /* Reduced from 1.5rem */
+    }
+    
+    .product-price-header {
+        font-size: 1.375rem; /* Reduced from 1.75rem */
+        padding: 0.875rem 1.25rem;
+    }
+    
+    .form-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .option-card {
+        padding: 1.25rem;
+    }
+    
+    .ultra-modern-btn {
+        padding: 1rem 1.75rem; /* Reduced from 1.25rem 2rem */
+        font-size: 0.9rem; /* Reduced from 1rem */
+    }
+}
+
+@media (max-width: 576px) {
+    .form-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .product-title {
+        font-size: 1.125rem; /* Reduced from 1.375rem */
+    }
+    
+    .form-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .product-rating {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+
+/* Professional Add to Cart Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 1rem 2rem !important; /* Reduced padding */
+    border-radius: 12px !important;
+    font-size: 0.95rem !important; /* Reduced from 1.1rem */
+    font-weight: 600 !important; /* Reduced from 700 */
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important; /* Reduced gap */
+    margin-top: 2rem !important;
+    width: 100% !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important; /* Reduced from 0.1em */
+    position: relative !important;
+    overflow: hidden !important;
+    text-decoration: none !important;
+}
+
+/* Shimmer Animation */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+/* Hover Effects */
+.btn-primary:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4) !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5) !important;
+}
+
+.btn-primary:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), 0 6px 20px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Text and Icon Styling */
+.btn-primary .text {
+    font-weight: 600; /* Reduced from 700 */
+    font-size: 0.95rem; /* Reduced from 1.1rem */
+}
+
+.btn-primary i {
+    font-size: 1rem !important; /* Reduced from 1.25rem */
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover i {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Loading State (Optional) */
+.btn-primary.loading {
+    pointer-events: none;
+    opacity: 0.8;
+    position: relative;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Alternative Color Schemes (Optional) */
+
+/* Green Success Button */
+.btn-primary.success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3) !important;
+}
+
+.btn-primary.success:hover {
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4) !important;
+}
+
+/* Orange Accent Button */
+.btn-primary.accent {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3) !important;
+}
+
+.btn-primary.accent:hover {
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .btn-primary {
+        padding: 0.875rem 1.5rem !important; /* Reduced */
+        font-size: 0.9rem !important; /* Reduced */
+        gap: 0.4rem !important;
+    }
+    
+    .btn-primary .text {
+        font-size: 0.9rem; /* Reduced */
+    }
+    
+    .btn-primary i {
+        font-size: 0.95rem !important; /* Reduced */
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-primary {
+        padding: 0.75rem 1.25rem !important; /* Reduced */
+        font-size: 0.85rem !important; /* Reduced */
+        border-radius: 10px !important;
+    }
+    
+    .btn-primary .text {
+        font-size: 0.85rem; /* Reduced */
+    }
+    
+    .btn-primary i {
+        font-size: 0.9rem !important; /* Reduced */
+    }
+}
+
+/* Disabled State */
+.btn-primary:disabled {
+    background: #9ca3af !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-primary:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Pulse Animation for Attention */
+.btn-primary.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+    }
+    100% {
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    }
+}
+
+</style>
 <section class="section-content padding-y bg">
-	<div class="container">
+    <div class="container">
 
-		<!-- ============================ COMPONENT 1 ================================= -->
-		<div class="card">
-			<div class="row no-gutters">
-				<aside class="col-md-6">
-					<article class="gallery-wrap">
-						<div class="img-big-wrap mainImage">
-							<center><img src="{{ single_product.images.url }}"></center>
-						</div> <!-- img-big-wrap.// -->
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="card">
+            <div class="row no-gutters">
+                <aside class="col-md-6">
+                    <article class="gallery-wrap">
+                        <div class="img-big-wrap mainImage">
+                            <center><img src="{{ single_product.images.url }}"></center>
+                        </div> <!-- img-big-wrap.// -->
 
-					</article> <!-- gallery-wrap .end// -->
-					<ul class="thumb">
-						<li>
-							<a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a>
-							{% for i in product_gallery %}
-							<a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
-							{% endfor %}
-						</li>
-					</ul>
-				</aside>
-				<main class="col-md-6 border-left">
+                    </article> <!-- gallery-wrap .end// -->
+                    <ul class="thumb">
+                        <li>
+                            <a href="{{ single_product.images.url }}" target="mainImage"><img src="{{ single_product.images.url }}" alt="Product Image"></a>
+                            {% for i in product_gallery %}
+                            <a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </aside>
+                <main class="col-md-6 border-left">
 
-					<form action="{% url 'add_cart' single_product.id %}" method="POST">
-						{% csrf_token %}
-						<article class="content-body">
+                    <form action="{% url 'add_cart' single_product.id %}" method="POST" class="modern-product-form">
+    {% csrf_token %}
+    
+    <!-- Modern Header Section -->
+    <div class="form-header">
+        <h2 class="product-title">{{ single_product.product_name }}</h2>
+        
+        <div class="product-rating">
+            <div class="rating-stars">
+                <i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+            </div>
+            <span class="review-count">{{single_product.countReview}} reviews</span>
+        </div>
+        
+        <div class="product-price-header">$ {{single_product.price}}</div>
+    </div>
+    
+    <!-- Form Body -->
+    <div class="form-body">
+        <div class="product-description">{{ single_product.description }}</div>
+        
+        <hr class="modern-divider">
+        
+        <!-- Service Type Selection -->
+        <div class="option-card">
+            <div class="option-label">
+                <div class="option-icon">⚙️</div>
+                Choose Service Type
+            </div>
+            <div class="modern-select">
+                <select name="servicetype" required>
+                    <option value="" disabled selected>Select Service Type</option>
+                    {% for i in single_product.variation_set.servicetype %}
+                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <!-- Time Slot Selection -->
+        <div class="option-card">
+            <div class="option-label">
+                <div class="option-icon">🕒</div>
+                Select TimeSlot
+            </div>
+            <div class="modern-select">
+                <select name="timeslot" required>
+                    <option value="" disabled selected>Select Timeslot</option>
+                    {% for i in single_product.variation_set.timeslot %}
+                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <hr class="modern-divider">
+        
+        <!-- Action Button -->
+        {% if single_product.stock <= 0 %}
+        <div class="modern-out-of-stock">
+            <h5>Out of Stock</h5>
+        </div>
+        {% else %}
+        <button type="submit" class="ultra-modern-btn pulse">
+            <span class="text">Add to Cart</span> 
+            <i class="fa fa-shopping-cart"></i>
+        </button>
+        {% endif %}
+    </div>
+</form>
+                </main> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- card.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
 
-							<h2 class="title">{{ single_product.product_name }}</h2>
-							<div class="rating-star">
-								<span>
-									<i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<span>{{single_product.countReview}} reviews</span>
-									</span>
-							</div>
+        <br>
 
+        <div class="row">
+            <div class="col-md-9">
 
-							<div class="mb-3">
-								<var class="price h4">$ {{single_product.price}}</var>
-							</div>
+                <form action="{% url 'submit_review' single_product.id %}" method="POST">
+                    {% csrf_token %}
+                    <h5>Write Your Review</h5>
 
-							<p>{{ single_product.description }}</p>
-
-
-							<hr>
-							<div class="row">
-								<div class="item-option-select">
-									<h6>Choose Service Type</h6>
-									<select name="servicetype" class="form-control" required>
-										<option value="" disabled selected>Select Service Type</option>
-										{% for i in single_product.variation_set.servicetype %}
-										<option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
-										{% endfor %}
-									</select>
-								</div>
-							</div>
-							<div class="row">
-								<div class="item-option-select">
-									<h6>Select TimeSlot</h6>
-									<select name="timeslot" class="form-control" required>
-										<option value="" disabled selected>Select Timeslot</option>
-										{% for i in single_product.variation_set.timeslot %}
-										<option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
-										{% endfor %}
-									</select>
-								</div>
-							</div>
-							<hr>
-							{% if single_product.stock <= 0 %}
-							<h5 class="text-danger">Out of Stock</h5>
-							{% else %}
-							<button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fa fa-shopping-cart"></i> </button>
-							{% endif %}
-						</article> <!-- product-info-aside .// -->
-					</form>
-				</main> <!-- col.// -->
-			</div> <!-- row.// -->
-		</div> <!-- card.// -->
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
-
-		<br>
-
-		<div class="row">
-			<div class="col-md-9">
-
-
-
-				<form action="{% url 'submit_review' single_product.id %}" method="POST">
-					{% csrf_token %}
-					<h5>Write Your Review</h5>
-
-					<div>
-						<!-- Rating stars -->
-						<label>How do you rate this product?</label>
-						<br>
-						<div class="rate">
-							<input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
-							<input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
-							<input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
-							<input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
-							<input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
-							<input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
-							<input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
-							<input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
-							<input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
-							<input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
-						</div>
+                    <div>
+                        <!-- Rating stars -->
+                        <label>How do you rate this product?</label>
+                        <br>
+                        <div class="rate">
+                            <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+                            <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+                            <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+                            <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+                            <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+                            <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                            <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+                            <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+                            <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+                            <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+                        </div>
 <br>
-						Review Title:
-						<input type="text" class="form-control" name="subject">
-						<br>
-						Review:
-						<textarea name="review" rows="4" class="form-control"></textarea>
-						<br>
-						<!-- {% if user.is_authenticated %}
-							{% if orderproduct %}
-								<input type="submit" value="Submit Review" class="btn btn-primary">
-							{% else %}
-								<p>You must purchase this product to post a review.</p>
-							{% endif %}
-						{% else %}
-						<p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
-						{% endif %} -->
+                        Review Title:
+                        <input type="text" class="form-control" name="subject">
+                        <br>
+                        Review:
+                        <textarea name="review" rows="4" class="form-control"></textarea>
+                        <br>
 
-						{% if user.is_authenticated %}
-								<input type="submit" value="Submit Review" class="btn btn-primary">
-						{% else %}
-						<p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
-						{% endif %}
-						<div class="alert alert-danger" role="alert" style="margin-top:10px;">
+                        {% if user.is_authenticated %}
+                                <input type="submit" value="Submit Review" class="btn btn-primary">
+                        {% else %}
+                        <p>You must be logged in to post a review. <span><a href="{% url 'login' %}">Login now</a></span></p>
+                        {% endif %}
+                        <div class="alert alert-danger" role="alert" style="margin-top:10px;">
   2-Factor Review Submission is disabled for demo purpose.
 </div>
 
-					</div>
+                    </div>
 {% include 'includes/alerts.html' %}
-				</form>
+                </form>
 <br>
 <header class="section-heading">
-	<h3>Customer Reviews </h3>
-	<div class="rating-star">
-		<span>
-			<i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
-			<i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
-			<i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
-			<i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
-			<i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<span>{{single_product.countReview}} reviews</span>
-			</span>
-	</div>
+    <h3>Customer Reviews </h3>
+    <div class="rating-star">
+        <span>
+            <i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+            <i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+            <i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+            <i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+            <i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+    <span>{{single_product.countReview}} reviews</span>
+            </span>
+    </div>
 
 </header>
 
 {% for review in reviews %}
-				<article class="box mb-3">
-					<div class="icontext w-100">
+                <article class="box mb-3">
+                    <div class="icontext w-100">
 
-						<div class="text">
-							<span class="date text-muted float-md-right">{{review.updated_at}} </span>
-							<h6 class="mb-1">{{review.user.full_name}} </h6>
-							<div class="rating-star">
-								<span>
-									<i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
-									<i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
-								</span>
-							</div>
-						</div>
-					</div> <!-- icontext.// -->
-					<div class="mt-3">
-						<h6>{{review.subject}}</h6>
-						<p>
-							{{review.review}}
-						</p>
-					</div>
-				</article>
+                        <div class="text">
+                            <span class="date text-muted float-md-right">{{review.updated_at}} </span>
+                            <h6 class="mb-1">{{review.user.full_name}} </h6>
+                            <div class="rating-star">
+                                <span>
+                                    <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div> <!-- icontext.// -->
+                    <div class="mt-3">
+                        <h6>{{review.subject}}</h6>
+                        <p>
+                            {{review.review}}
+                        </p>
+                    </div>
+                </article>
 {% endfor %}
 
+            </div> <!-- col.// -->
+        </div> <!-- row.// -->
 
-			</div> <!-- col.// -->
-		</div> <!-- row.// -->
-
-
-	</div> <!-- container .//  -->
+    </div> <!-- container .//  -->
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 

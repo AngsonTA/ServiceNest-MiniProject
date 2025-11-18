@@ -3,141 +3,571 @@
 
 {% block content %}
 
+<style>
+/* Modern Payment Page Styles */
+.payment-page {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
 
-<section class="section-content padding-y bg">
-	<div class="container">
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
-		<!-- ============================ COMPONENT 1 ================================= -->
-		<h4 class="text-center mb-20">Review Your Order and Make Payment</h4>
-		<div class="row">
+.modern-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-			<aside class="col-lg-8">
-				<div class="card">
-					<h5 class="card-header">Billing Address</h5>
-					<div class="card-body">
-						<p class="card-text mb-0">{{order.full_name}}</p>
-						<p class="card-text mb-0">{{order.full_address}}</p>
-						<p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
-						<p class="card-text mb-0">{{order.country}}</p>
-						<p class="card-text mb-0">{{order.email}}</p>
-						<p class="card-text mb-0">{{order.phone}}</p>
-						{% if order.order_note %}
-						<b>Order Note: </b> {{order.order_note}}
-						{% endif %}
+.modern-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+}
 
+.card-header-modern {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: none;
+    position: relative;
+}
 
-					</div>
-				</div>
-				<div class="card">
-					<h5 class="card-header">Payment Method</h5>
-					<div class="card-body">
-						<p class="card-text">PayPal</p>
+.card-header-modern::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
 
-					</div>
-				</div>
-				<div class="card">
-					<h5 class="card-header">Review Products</h5>
-					<div class="card-body">
-						<table class="table table-borderless table-shopping-cart">
-							<thead class="text-muted">
-								<tr class="small text-uppercase">
-									<th scope="col">Product</th>
-									<th scope="col" width="120">Quantity</th>
-									<th scope="col" width="120">Price</th>
+.card-header-modern i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
 
-								</tr>
-							</thead>
-							<tbody>
+.card-body-modern {
+    padding: 2rem;
+}
 
-								{% for cart_item in cart_items %}
-								<tr>
-									<td>
-										<figure class="itemside align-items-center">
-											<div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
-											<figcaption class="info">
-												<a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
-												<p class="text-muted small">
-													{% if cart_item.variations.all %}
-													{% for item in cart_item.variations.all %}
-													{{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
-													{% endfor %}
-													{% endif %}
-												</p>
-											</figcaption>
-										</figure>
-									</td>
-									<td>
-										<!-- col.// -->
-										<label for="">{{cart_item.quantity}}</label>
-									</td>
-									<td>
-										<div class="price-wrap">
-											<var class="price">$ {{ cart_item.sub_total }}</var>
-											<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
-										</div> <!-- price-wrap .// -->
-									</td>
+.billing-info {
+    display: grid;
+    gap: 0.75rem;
+}
 
-								</tr>
-								{% endfor %}
+.billing-item {
+    background: #f8fafc;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid #6366f1;
+    font-weight: 500;
+    color: #1f2937;
+    transition: all 0.3s ease;
+}
 
-							</tbody>
-						</table>
+.billing-item:hover {
+    background: #e2e8f0;
+    transform: translateX(5px);
+}
 
-					</div>
-				</div>
+.order-note {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #f59e0b;
+    padding: 1.25rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+}
 
-			</aside> <!-- col.// -->
-			<aside class="col-lg-4">
+.order-note b {
+    color: #92400e;
+}
 
-				<div class="card">
-					<div class="card-body">
-						<dl class="dlist-align">
-							<dt>Total price:</dt>
-							<dd class="text-right">$ {{total}}</dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Tax:</dt>
-							<dd class="text-right"> $ {{tax}}</dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Grand Total:</dt>
-							<dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
-						</dl>
-						<hr>
-						<p class="text-center mb-3">
-							<img src="{% static './images/misc/payments.png' %}" height="26">
-						</p>
+.payment-method-card {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 2px solid #10b981;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+}
 
+.payment-method-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 12px;
+    z-index: -1;
+}
 
-						<div id="paypal-button-container">
-							<!-- PayPal Button Will Load -->
-						</div>
+.payment-method-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
 
-					</div> <!-- card-body.// -->
-				</div> <!-- card.// -->
-				<div class="alert alert-danger" role="alert">
-				  <b>Please Note: </b>This is a demo website. Do not try to make real payments.
-				</div>
-			</aside> <!-- col.// -->
+.modern-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: none;
+}
 
+.modern-table table {
+    margin: 0;
+    border: none;
+}
 
-		</div> <!-- row.// -->
+.modern-table thead {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
 
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
+.modern-table thead th {
+    color: white;
+    font-weight: 700;
+    padding: 1.25rem;
+    border: none;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
 
-	</div> <!-- container .//  -->
+.modern-table tbody td {
+    padding: 1.5rem 1.25rem;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.modern-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+}
+
+.product-info {
+    margin-left: 1rem;
+}
+
+.product-title {
+    font-weight: 700;
+    color: #1f2937;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.product-title:hover {
+    color: #6366f1;
+    text-decoration: none;
+}
+
+.product-variations {
+    background: #f8fafc;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+    border-left: 3px solid #6366f1;
+}
+
+.quantity-display {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.price-info {
+    text-align: center;
+}
+
+.main-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    display: block;
+}
+
+.unit-price {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: sticky;
+    top: 20px;
+}
+
+.summary-header {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    text-align: center;
+}
+
+.summary-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.summary-body {
+    padding: 2rem;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.summary-line:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    color: #6b7280;
+}
+
+.summary-value {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.grand-total {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    margin: 0 -2rem;
+    padding: 1.5rem 2rem;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.payment-methods-image {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.payment-methods-image img {
+    max-height: 40px;
+    filter: brightness(0.8);
+}
+
+.paypal-container {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px dashed #6366f1;
+}
+
+.demo-alert {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px solid #f87171;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.demo-alert-icon {
+    font-size: 2rem;
+    color: #dc2626;
+    margin-bottom: 1rem;
+}
+
+.demo-alert-text {
+    color: #991b1b;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .summary-card {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-page {
+        padding: 1rem 0;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .card-body-modern {
+        padding: 1.5rem;
+    }
+    
+    .summary-body {
+        padding: 1.5rem;
+    }
+    
+    .modern-table thead th,
+    .modern-table tbody td {
+        padding: 1rem 0.75rem;
+    }
+    
+    .product-info {
+        margin-left: 0.75rem;
+    }
+    
+    .summary-line {
+        font-size: 1rem;
+    }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modern-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.modern-card:nth-child(1) { animation-delay: 0.1s; }
+.modern-card:nth-child(2) { animation-delay: 0.2s; }
+.modern-card:nth-child(3) { animation-delay: 0.3s; }
+.summary-card { animation-delay: 0.4s; }
+</style>
+
+<section class="payment-page">
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-credit-card"></i>
+            Review Your Order and Make Payment
+        </h1>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Billing Address Card -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Billing Address
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="billing-info">
+                            <div class="billing-item">
+                                <i class="fas fa-user"></i> {{order.full_name}}
+                            </div>
+                            <div class="billing-item">
+                                <i class="fas fa-home"></i> {{order.full_address}}
+                            </div>
+                            <div class="billing-item">
+                                <i class="fas fa-city"></i> {{order.city}}, {{order.state}}
+                            </div>
+                            <div class="billing-item">
+                                <i class="fas fa-flag"></i> {{order.country}}
+                            </div>
+                            <div class="billing-item">
+                                <i class="fas fa-envelope"></i> {{order.email}}
+                            </div>
+                            <div class="billing-item">
+                                <i class="fas fa-phone"></i> {{order.phone}}
+                            </div>
+                        </div>
+                        
+                        {% if order.order_note %}
+                        <div class="order-note">
+                            <b><i class="fas fa-sticky-note"></i> Order Note:</b> {{order.order_note}}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Method
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="payment-method-card">
+                            <div class="payment-method-text">
+                                <i class="fab fa-paypal"></i>
+                                PayPal
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Products Card -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <i class="fas fa-shopping-bag"></i>
+                        Review Products
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="modern-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th width="120" class="text-center">Quantity</th>
+                                        <th width="120" class="text-center">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cart_item in cart_items %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ cart_item.product.images.url }}" class="product-image" alt="Product">
+                                                <div class="product-info">
+                                                    <a href="{{ cart_item.product.get_url }}" class="product-title">
+                                                        {{ cart_item.product.product_name }}
+                                                    </a>
+                                                    {% if cart_item.variations.all %}
+                                                    <div class="product-variations">
+                                                        {% for item in cart_item.variations.all %}
+                                                            <strong>{{ item.variation_category | capfirst }}:</strong> {{ item.variation_value | capfirst }}
+                                                            {% if not forloop.last %}<br>{% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="quantity-display">{{cart_item.quantity}}</span>
+                                        </td>
+                                        <td>
+                                            <div class="price-info">
+                                                <span class="main-price">${{ cart_item.sub_total }}</span>
+                                                <div class="unit-price">${{ cart_item.product.price }} each</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <h3 class="summary-title">
+                            <i class="fas fa-receipt"></i>
+                            Order Summary
+                        </h3>
+                    </div>
+                    <div class="summary-body">
+                        <div class="summary-line">
+                            <span class="summary-label">Subtotal:</span>
+                            <span class="summary-value">${{total}}</span>
+                        </div>
+                        <div class="summary-line">
+                            <span class="summary-label">Tax:</span>
+                            <span class="summary-value">${{tax}}</span>
+                        </div>
+                        <div class="summary-line grand-total">
+                            <span>Grand Total:</span>
+                            <span>${{grand_total}}</span>
+                        </div>
+                        
+                        <div class="payment-methods-image">
+                            <img src="{% static './images/misc/payments.png' %}" alt="Payment Methods">
+                        </div>
+
+                        <div class="paypal-container">
+                            <div id="paypal-button-container">
+                                <!-- PayPal Button Will Load -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-alert">
+                    <div class="demo-alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <p class="demo-alert-text">
+                        <strong>Please Note:</strong> This is a demo website. Do not try to make real payments.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
 
 <script>
-
-	function getCookie(name) {
+function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -147,63 +577,60 @@
     return cookieValue;
 }
 
-	var amount = "{{ grand_total }}"
-	var url = "{% url 'payments' %}"
-	var csrftoken = getCookie('csrftoken');
-	var orderID = "{{order.order_number}}"
-	var payment_method = 'PayPal'
-	var redirect_url = "{% url 'order_complete' %}"
-	// Render the PayPal button into #paypal-button-container
-	paypal.Buttons({
+var amount = "{{ grand_total }}"
+var url = "{% url 'payments' %}"
+var csrftoken = getCookie('csrftoken');
+var orderID = "{{order.order_number}}"
+var payment_method = 'PayPal'
+var redirect_url = "{% url 'order_complete' %}"
 
-		style: {
-			color: 'blue',
-			shape: 'pill',
-			label: 'pay',
-			height: 40
-		},
+// Render the PayPal button into #paypal-button-container
+paypal.Buttons({
+    style: {
+        color: 'blue',
+        shape: 'pill',
+        label: 'pay',
+        height: 40
+    },
 
-		// Set up the transaction
-		createOrder: function(data, actions) {
-			return actions.order.create({
-				purchase_units: [{
-					amount: {
-						value: amount,
-					}
-				}]
-			});
-		},
+    // Set up the transaction
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: amount,
+                }
+            }]
+        });
+    },
 
-		// Finalize the transaction
-		onApprove: function(data, actions) {
-			return actions.order.capture().then(function(details) {
-				// Show a success message to the buyer
-				console.log(details);
-				sendData();
-				function sendData(){
-					fetch(url, {
-						method : "POST",
-						headers: {
-							"Content-type": "application/json",
-							"X-CSRFToken": csrftoken,
-						},
-						body: JSON.stringify({
-							orderID: orderID,
-							transID: details.id,
-							payment_method: payment_method,
-							status: details.status,
-						}),
-					})
-				  .then((response) => response.json())
-				  .then((data) => {
-						window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
-					});
-				}
-			});
-		}
-
-
-	}).render('#paypal-button-container');
+    // Finalize the transaction
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            console.log(details);
+            sendData();
+            function sendData(){
+                fetch(url, {
+                    method : "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        "X-CSRFToken": csrftoken,
+                    },
+                    body: JSON.stringify({
+                        orderID: orderID,
+                        transID: details.id,
+                        payment_method: payment_method,
+                        status: details.status,
+                    }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
+                });
+            }
+        });
+    }
+}).render('#paypal-button-container');
 </script>
 
 {% endblock %}

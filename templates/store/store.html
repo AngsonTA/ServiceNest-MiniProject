@@ -3,157 +3,654 @@
 
 {% block content %}
 
-<!-- ========================= SECTION PAGETOP ========================= -->
-<section class="section-pagetop bg">
-  <div class="container-fluid">
-    {% if 'search' in request.path %}
-     <h2 class="title-page">Search Results</h2>
-    {% else %}
-     <h2 class="title-page">Our Store</h2>
+<style>
+/* Modern Store Page Styles */
+.modern-store-page {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    min-height: 100vh;
+}
 
-    {% endif %}
-  </div>
-</section>
-<!-- ========================= SECTION INTRO END// ========================= -->
+/* Modern Page Header */
+.modern-page-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 3rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+}
 
-<!-- ========================= SECTION CONTENT ========================= -->
-<section class="section-content padding-y">
-  <div class="container-fluid">
-    <div class="row">
-      <aside class="col-md-3">
-        <div class="card">
-          <article class="filter-group">
-            <header class="card-header">
-              <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
-                <i class="icon-control fa fa-chevron-down"></i>
-                <h6 class="title">Categories</h6>
-              </a>
-            </header>
-            <div class="filter-content collapse show" id="collapse_1">
-              <div class="card-body">
-                <ul class="list-menu">
-                  <li><a href="{% url 'store' %}">All Products</a></li>
-                  {% for category in links %}
-                    <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          </article>
+.modern-page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+}
 
-          <!-- Optional: Price filter -->
-          <article class="filter-group">
-            <header class="card-header">
-              <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
-                <i class="icon-control fa fa-chevron-down"></i>
-                <h6 class="title">Price range</h6>
-              </a>
-            </header>
-            <div class="filter-content collapse show" id="collapse_3">
-              <div class="card-body">
-                <div class="form-row">
-                  <div class="form-group col-md-6">
-                    <label>Min</label>
-                    <select class="form-control">
-                      <option value="0">₹0</option>
-                      <option value="50">₹50</option>
-                      <option value="100">₹100</option>
-                      <option value="150">₹150</option>
-                      <option value="200">₹200</option>
-                      <option value="500">₹500</option>
-                      <option value="1000">₹1000</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-6 text-right">
-                    <label>Max</label>
-                    <select class="form-control">
-                      <option value="50">₹50</option>
-                      <option value="100">₹100</option>
-                      <option value="150">₹150</option>
-                      <option value="200">₹200</option>
-                      <option value="500">₹500</option>
-                      <option value="1000">₹1000</option>
-                      <option value="2000">₹2000+</option>
-                    </select>
-                  </div>
-                </div>
-                <button class="btn btn-block btn-warning">Apply</button>
-              </div>
-            </div>
-          </article>
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.page-subtitle {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 2;
+}
+
+/* Modern Sidebar */
+.modern-sidebar {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: sticky;
+    top: 20px;
+    margin-bottom: 2rem;
+}
+
+.filter-header {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.5rem;
+    border: none;
+    position: relative;
+}
+
+.filter-header a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filter-header a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.filter-header .icon-control {
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+}
+
+.filter-header a[aria-expanded="true"] .icon-control {
+    transform: rotate(180deg);
+}
+
+.filter-body {
+    padding: 2rem;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 0.75rem;
+}
+
+.category-list a {
+    display: block;
+    padding: 0.875rem 1.25rem;
+    color: #4b5563;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-list a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left 0.3s;
+}
+
+.category-list a:hover::before {
+    left: 100%;
+}
+
+.category-list a:hover {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    text-decoration: none;
+    transform: translateX(8px);
+    border-color: #6366f1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Main Content Header */
+.content-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.products-found {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.products-count {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Modern Product Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.modern-product-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.modern-product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.modern-product-card:hover::before {
+    transform: scaleX(1);
+}
+
+.modern-product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.modern-product-card:hover .product-image-container img {
+    transform: scale(1.1);
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modern-product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.quick-view-btn {
+    background: white;
+    color: #6366f1;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.quick-view-btn:hover {
+    transform: scale(1.05);
+    color: #6366f1;
+    text-decoration: none;
+}
+
+.product-info-modern {
+    padding: 2rem;
+}
+
+.product-title-modern {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.product-title-modern:hover {
+    color: #6366f1;
+    text-decoration: none;
+}
+
+.product-price-modern {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #059669;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.view-details-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.empty-state-icon {
+    font-size: 5rem;
+    color: #d1d5db;
+    margin-bottom: 2rem;
+}
+
+.empty-state-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.empty-state-text {
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.empty-state-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.empty-state-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* Modern Pagination */
+.modern-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.pagination {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    gap: 0.5rem;
+}
+
+.page-item .page-link {
+    border: none;
+    background: transparent;
+    color: #4b5563;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin: 0 0.25rem;
+}
+
+.page-item .page-link:hover {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.page-item.disabled .page-link {
+    color: #9ca3af;
+    background: transparent;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .modern-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .modern-page-header {
+        padding: 2rem 0 1.5rem;
+    }
+    
+    .page-title {
+        font-size: 1.75rem;
+    }
+    
+    .content-header {
+        padding: 1.5rem;
+    }
+    
+    .products-found {
+        font-size: 1.1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .product-info-modern {
+        padding: 1.5rem;
+    }
+    
+    .filter-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .content-header {
+        padding: 1rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagination {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .page-item .page-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+<div class="modern-store-page">
+    <!-- Modern Page Header -->
+    <section class="modern-page-header">
+        <div class="container-fluid">
+            {% if 'search' in request.path %}
+            <h1 class="page-title">Search Results</h1>
+            <p class="page-subtitle">Find exactly what you're looking for</p>
+            {% else %}
+            <h1 class="page-title">Our Store</h1>
+            <p class="page-subtitle">Discover amazing products and services</p>
+            {% endif %}
         </div>
-      </aside>
+    </section>
 
-      <main class="col-md-9">
-        <header class="border-bottom mb-4 pb-3">
-          <div class="form-inline">
-            <span class="mr-md-auto"><b>{{ product_count }}</b> items found</span>
-          </div>
-        </header>
-
-        <div class="row">
-          {% if products %}
-          {% for product in products %}
-            <div class="col-md-4">
-              <figure class="card card-product-grid">
-                <div class="img-wrap">
-                  <a href="{{ product.get_url }}">
-                    <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
-                  </a>
-                </div>
-                <figcaption class="info-wrap">
-                  <div class="fix-height">
-                    <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-                    <div class="price-wrap mt-2">
-                      <span class="price">₹{{ product.price }}</span>
+    <!-- Main Content -->
+    <section class="section-content padding-y">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Modern Sidebar -->
+                <aside class="col-md-3">
+                    <div class="modern-sidebar">
+                        <div class="filter-header card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
+                                <span>
+                                    <i class="fas fa-layer-group"></i>
+                                    Categories
+                                </span>
+                                <i class="icon-control fa fa-chevron-down"></i>
+                            </a>
+                        </div>
+                        <div class="filter-content collapse show" id="collapse_1">
+                            <div class="filter-body">
+                                <ul class="category-list">
+                                    <li><a href="{% url 'store' %}"><i class="fas fa-th-large"></i> All Products</a></li>
+                                    {% for category in links %}
+                                    <li><a href="{{ category.get_url }}"><i class="fas fa-tag"></i> {{ category.category_name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <a href="{{ product.get_url }}" class="btn btn-block btn-warning">View Details</a>
-                </figcaption>
-              </figure>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="col-md-9">
+                    <!-- Content Header -->
+                    <div class="content-header">
+                        <div class="products-found">
+                            <span class="products-count">{{ product_count }}</span>
+                            <span>items found</span>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    {% if products %}
+                    <div class="products-grid">
+                        {% for product in products %}
+                        <div class="modern-product-card">
+                            <div class="product-image-container">
+                                <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
+                                <div class="product-overlay">
+                                    <a href="{{ product.get_url }}" class="quick-view-btn">
+                                        <i class="fas fa-eye"></i>
+                                        Quick View
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-info-modern">
+                                <a href="{{ product.get_url }}" class="product-title-modern">{{ product.product_name }}</a>
+                                <div class="product-price-modern">₹{{ product.price }}</div>
+                                <a href="{{ product.get_url }}" class="view-details-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h2 class="empty-state-title">No Results Found</h2>
+                        <p class="empty-state-text">
+                            We couldn't find any products matching your criteria.<br>
+                            Try adjusting your search or browse our categories.
+                        </p>
+                        <a href="{% url 'store' %}" class="empty-state-btn">
+                            <i class="fas fa-home"></i>
+                            Back to Store
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <!-- Modern Pagination -->
+                    {% if products.has_other_pages %}
+                    <nav class="modern-pagination" aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </span>
+                            </li>
+                            {% endif %}
+
+                            {% for num in products.paginator.page_range %}
+                                {% if products.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </main>
             </div>
-          {% empty %}
-            <div class="col-md-12">
-              <p>No products available in this category.</p>
-            </div>
-          {% endfor %}
-          {% else %}
-          <div>
-            <h2>No results found. Please try again.</h2>
-          </div>
-          {% endif %}
         </div>
-
-       <nav class="mt-4" aria-label="Page navigation">
-  {% if products.has_other_pages %}
-    <ul class="pagination">
-      {% if products.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">Previous</span></li>
-      {% endif %}
-
-      {% for num in products.paginator.page_range %}
-        {% if products.number == num %}
-          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-        {% else %}
-          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-        {% endif %}
-      {% endfor %}
-
-      {% if products.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">Next</span></li>
-      {% endif %}
-    </ul>
-  {% endif %}
-</nav>
-
-      </main>
-    </div>
-  </div>
-</section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+    </section>
+</div>
 
 {% endblock %}

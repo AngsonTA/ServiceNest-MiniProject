@@ -1,9 +1,363 @@
 {% autoescape off %}
-
-Hi {{user.first_name}},
-
-YOUR ORDER HAS BEEN RECIEVED
-
-Order Number: {{order.order_number}}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        /* Email-safe CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f8fafc;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #22c55e;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .email-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .email-body {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 18px;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .order-details {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #6366f1;
+            margin: 30px 0;
+        }
+        
+        .order-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .order-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #6366f1;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 2px solid #e2e8f0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .next-steps {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #22c55e;
+            margin: 30px 0;
+        }
+        
+        .next-steps-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .next-steps-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .next-steps-list li {
+            color: #047857;
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .next-steps-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .support-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .support-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .support-text {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info {
+            font-weight: 600;
+            color: #6366f1;
+        }
+        
+        .email-footer {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .social-link:hover {
+            opacity: 1;
+            color: white;
+        }
+        
+        /* Mobile Responsiveness */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .email-header,
+            .email-body,
+            .email-footer {
+                padding: 25px 20px;
+            }
+            
+            .email-title {
+                font-size: 24px;
+            }
+            
+            .greeting {
+                font-size: 20px;
+            }
+            
+            .message {
+                font-size: 16px;
+            }
+            
+            .order-details,
+            .next-steps,
+            .support-section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            
+            .order-number {
+                font-size: 20px;
+                padding: 8px 15px;
+            }
+            
+            .success-icon {
+                font-size: 50px;
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Email Header -->
+        <div class="email-header">
+            <div class="success-icon">✓</div>
+            <h1 class="email-title">Order Confirmed!</h1>
+            <p class="email-subtitle">Thank you for your purchase</p>
+        </div>
+        
+        <!-- Email Body -->
+        <div class="email-body">
+            <h2 class="greeting">Hi {{user.first_name}},</h2>
+            
+            <p class="message">
+                Great news! We've received your order and are already working on it. 
+                You'll receive another email with tracking information once your order ships.
+            </p>
+            
+            <!-- Order Details -->
+            <div class="order-details">
+                <h3 class="order-title">
+                    <span>📋</span> Your Order Details
+                </h3>
+                <p style="margin-bottom: 15px; color: #6b7280; font-weight: 500;">Order Number:</p>
+                <div class="order-number">{{order.order_number}}</div>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3 class="next-steps-title">
+                    <span>🚀</span> What happens next?
+                </h3>
+                <ul class="next-steps-list">
+                    <li>We'll process your order within 1-2 business days</li>
+                    <li>You'll receive a shipping confirmation with tracking info</li>
+                    <li>Your order will be delivered to your specified address</li>
+                    <li>Enjoy your new purchase!</li>
+                </ul>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <a href="#" class="cta-button">Track Your Order</a>
+            </div>
+            
+            <!-- Support Section -->
+            <div class="support-section">
+                <h3 class="support-title">Need Help?</h3>
+                <p class="support-text">
+                    Our customer support team is here to help you with any questions.
+                </p>
+                <div class="contact-info">
+                    📧 support@yourstore.com | 📞 +1-800-123-4567
+                </div>
+            </div>
+        </div>
+        
+        <!-- Email Footer -->
+        <div class="email-footer">
+            <h3 class="company-name">Your Store Name</h3>
+            <div class="social-links">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">💼</a>
+            </div>
+            <p class="footer-text">
+                This email was sent to you because you placed an order with us.<br>
+                If you have any questions, please don't hesitate to contact us.<br><br>
+                © 2025 Your Store Name. All rights reserved.<br>
+                123 Business Street, City, State 12345
+            </p>
+        </div>
+    </div>
+</body>
+</html>
 {% endautoescape %}

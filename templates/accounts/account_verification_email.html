@@ -1,12 +1,490 @@
 {% autoescape off %}
-
-Hi {{user.first_name}},
-
-
-Please click on below link to confirm your registration.
-http://{{domain}}{% url 'activate' uidb64=uid token=token %}
-
-
-if you think it's not you, Please ignore this email.
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Your Registration</title>
+    <style>
+        /* Email-safe CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f8fafc;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .welcome-icon {
+            font-size: 60px;
+            color: #fbbf24;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .email-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .email-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .email-body {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 18px;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .welcome-message {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #22c55e;
+            margin: 30px 0;
+        }
+        
+        .welcome-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .welcome-text {
+            color: #047857;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .activation-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid #7dd3fc;
+        }
+        
+        .activation-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+        }
+        
+        .activation-text {
+            color: #0369a1;
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .activation-button {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .activation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .link-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .link-info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .activation-link {
+            font-size: 12px;
+            color: #6b7280;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .expiry-notice {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid #f59e0b;
+        }
+        
+        .expiry-notice-text {
+            color: #92400e;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .benefits-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid #7dd3fc;
+        }
+        
+        .benefits-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .benefits-list li {
+            color: #0369a1;
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .ignore-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .ignore-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+        
+        .ignore-text {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .support-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .support-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .support-text {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info {
+            font-weight: 600;
+            color: #22c55e;
+        }
+        
+        .email-footer {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .social-link:hover {
+            opacity: 1;
+            color: white;
+        }
+        
+        /* Mobile Responsiveness */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .email-header,
+            .email-body,
+            .email-footer {
+                padding: 25px 20px;
+            }
+            
+            .email-title {
+                font-size: 24px;
+            }
+            
+            .greeting {
+                font-size: 20px;
+            }
+            
+            .message {
+                font-size: 16px;
+            }
+            
+            .activation-section,
+            .welcome-message,
+            .benefits-section,
+            .ignore-section,
+            .support-section,
+            .expiry-notice {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            
+            .activation-button {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
+            
+            .welcome-icon {
+                font-size: 50px;
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Email Header -->
+        <div class="email-header">
+            <div class="welcome-icon">🎉</div>
+            <h1 class="email-title">Welcome to Our Community!</h1>
+            <p class="email-subtitle">Just one more step to get started</p>
+        </div>
+        
+        <!-- Email Body -->
+        <div class="email-body">
+            <h2 class="greeting">Hi {{user.first_name}},</h2>
+            
+            <p class="message">
+                Thank you for joining us! We're excited to have you as part of our community. 
+                To complete your registration and start enjoying all our features, please confirm your email address.
+            </p>
+            
+            <!-- Welcome Message -->
+            <div class="welcome-message">
+                <h3 class="welcome-title">
+                    <span>🚀</span> You're Almost There!
+                </h3>
+                <p class="welcome-text">
+                    Your account has been created successfully. We just need to verify your email address 
+                    to ensure the security of your account and enable all features.
+                </p>
+            </div>
+            
+            <!-- Activation Section -->
+            <div class="activation-section">
+                <h3 class="activation-title">Confirm Your Email Address</h3>
+                <p class="activation-text">
+                    Click the button below to verify your email and activate your account:
+                </p>
+                <a href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}" class="activation-button">
+                    ✅ Confirm My Email
+                </a>
+                
+                <!-- Link Information -->
+                <div class="link-info">
+                    <div class="link-info-title">Or copy this link to your browser:</div>
+                    <div class="activation-link">http://{{domain}}{% url 'activate' uidb64=uid token=token %}</div>
+                </div>
+            </div>
+            
+            <!-- Expiry Notice -->
+            <div class="expiry-notice">
+                <p class="expiry-notice-text">
+                    <span>⏰</span>
+                    This activation link will expire in 24 hours for security reasons
+                </p>
+            </div>
+            
+            <!-- Benefits Section -->
+            <div class="benefits-section">
+                <h3 class="benefits-title">
+                    <span>🎁</span> What you'll get:
+                </h3>
+                <ul class="benefits-list">
+                    <li>Access to exclusive products and deals</li>
+                    <li>Personalized shopping experience</li>
+                    <li>Order tracking and history</li>
+                    <li>Priority customer support</li>
+                    <li>Special member-only offers</li>
+                </ul>
+            </div>
+            
+            <!-- If Not You Section -->
+            <div class="ignore-section">
+                <h3 class="ignore-title">Didn't create an account?</h3>
+                <p class="ignore-text">
+                    If you didn't create an account with us, please ignore this email. 
+                    No account will be created and no further emails will be sent.
+                    <br><br>
+                    <strong>Your email address will be removed from our system automatically.</strong>
+                </p>
+            </div>
+            
+            <!-- Support Section -->
+            <div class="support-section">
+                <h3 class="support-title">Need Help?</h3>
+                <p class="support-text">
+                    If you're having trouble with the activation link or have any questions, 
+                    our friendly support team is here to help.
+                </p>
+                <div class="contact-info">
+                    📧 support@yourstore.com | 📞 +1-800-123-4567
+                </div>
+            </div>
+        </div>
+        
+        <!-- Email Footer -->
+        <div class="email-footer">
+            <h3 class="company-name">Your Store Name</h3>
+            <div class="social-links">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">💼</a>
+            </div>
+            <p class="footer-text">
+                This email was sent to confirm your registration.<br>
+                Please do not reply to this email address.<br><br>
+                © 2025 Your Store Name. All rights reserved.<br>
+                123 Business Street, City, State 12345
+            </p>
+        </div>
+    </div>
+</body>
+</html>
 {% endautoescape %}

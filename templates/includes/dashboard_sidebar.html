@@ -1,12 +1,230 @@
 <aside class="col-md-3">
-  <!--   SIDEBAR   -->
-  <ul class="list-group">
-    <a class="list-group-item {% if '/accounts/' == request.path %}active{% endif %}" href="{% url 'dashboard' %}"> Dashboard </a>
-    <a class="list-group-item {% if '/my_orders/' in request.path %}active{% endif %}" href="{% url 'my_orders' %}"> My Orders </a>
-    <a class="list-group-item {% if '/edit_profile/' in request.path %}active{% endif %}" href="{% url 'edit_profile' %}"> Edit Profile </a>
-    <a class="list-group-item {% if '/change_password/' in request.path %}active{% endif %}" href="{% url 'change_password' %}"> Change Password </a>
-  </ul>
-  <br>
-  <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
+  <style>
+    /* Modern Sidebar Styles */
+    .modern-sidebar {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      padding: 1.5rem;
+      position: sticky;
+      top: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e5e7eb;
+      position: relative;
+    }
+
+    .sidebar-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 2px;
+    }
+
+    .modern-list-group {
+      border: none;
+      background: transparent;
+    }
+
+    .modern-list-item {
+      background: transparent;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      padding: 1rem 1.25rem;
+      color: #4b5563;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modern-list-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .modern-list-item:hover::before {
+      left: 100%;
+    }
+
+    .modern-list-item:hover {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .modern-list-item.active {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .modern-list-item i {
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .modern-list-item:hover i,
+    .modern-list-item.active i {
+      transform: scale(1.1);
+    }
+
+    .modern-logout-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      width: 100%;
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+    }
+
+    .modern-logout-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+
+    .modern-logout-btn i {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .modern-logout-btn:hover i {
+      transform: rotate(360deg);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .modern-sidebar {
+        position: static;
+        top: auto;
+        margin-bottom: 2rem;
+        padding: 1rem;
+      }
+
+      .sidebar-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      .modern-list-item {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .modern-logout-btn {
+        padding: 0.75rem 1rem;
+        margin-top: 1.5rem;
+      }
+    }
+
+    /* Animation for sidebar entrance */
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .modern-sidebar {
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+    /* Pulse effect for active item */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4);
+      }
+      50% {
+        box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.6);
+      }
+      100% {
+        box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4);
+      }
+    }
+
+    .modern-list-item.active {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  </style>
+
+  <!-- MODERN SIDEBAR -->
+  <div class="modern-sidebar">
+    <h4 class="sidebar-title">
+      <i class="fas fa-user-circle"></i> My Account
+    </h4>
+    
+    <ul class="list-group modern-list-group">
+      <a class="modern-list-item {% if '/accounts/' == request.path %}active{% endif %}" href="{% url 'dashboard' %}">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      
+      <a class="modern-list-item {% if '/my_orders/' in request.path %}active{% endif %}" href="{% url 'my_orders' %}">
+        <i class="fas fa-shopping-bag"></i>
+        <span>My Orders</span>
+      </a>
+      
+      <a class="modern-list-item {% if '/edit_profile/' in request.path %}active{% endif %}" href="{% url 'edit_profile' %}">
+        <i class="fas fa-user-edit"></i>
+        <span>Edit Profile</span>
+      </a>
+      
+      <a class="modern-list-item {% if '/change_password/' in request.path %}active{% endif %}" href="{% url 'change_password' %}">
+        <i class="fas fa-lock"></i>
+        <span>Change Password</span>
+      </a>
+    </ul>
+    
+    <a class="modern-logout-btn" href="{% url 'logout' %}">
+      <i class="fas fa-power-off"></i>
+      <span>Log out</span>
+    </a>
+  </div>
   <!--   SIDEBAR .//END   -->
 </aside>

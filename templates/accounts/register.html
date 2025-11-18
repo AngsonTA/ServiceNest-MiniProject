@@ -1,65 +1,600 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
+{% load widget_tweaks %}
 
-<section class="section-content padding-y">
+<style>
+/* Modern Registration Page Styles */
+.register-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
 
-<!-- ============================ COMPONENT REGISTER   ================================= -->
-	<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
-      <article class="card-body">
-        {% include 'includes/alerts.html' %}
+.register-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
+    background-size: cover;
+}
 
-		<header class="mb-4"><h4 class="card-title">Sign up</h4></header>
-		<form action="{% url 'register' %}" method="POST">
-      {% csrf_token %}
+.register-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
+.modern-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: none;
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out;
+}
 
-				<div class="form-row">
-					<div class="col form-group">
-						<label>First name</label>
-					  	{{ form.first_name }}
-					</div> <!-- form-group end.// -->
-					<div class="col form-group">
-						<label>Last name</label>
-					  	{{ form.last_name }}
-					</div> <!-- form-group end.// -->
-				</div> <!-- form-row end.// -->
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
+.card-header-modern {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+}
 
-				<div class="form-row">
-					<div class="form-group col-md-6">
-					  <label>Email Address</label>
-					  {{form.email}}
-					</div> <!-- form-group end.// -->
-					<div class="form-group col-md-6">
-					  <label>Phone Number</label>
-					  {{form.phone_number}}
-					</div> <!-- form-group end.// -->
-				</div> <!-- form-row.// -->
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label>Create password</label>
-					    {{ form.password }}
-					</div> <!-- form-group end.// -->
-					<div class="form-group col-md-6">
-						<label>Repeat password</label>
-            {{form.confirm_password}}
-					</div> <!-- form-group end.// -->
-				</div>
-			    <div class="form-group">
-			        <button type="submit" class="btn btn-primary btn-block"> Register  </button>
-			    </div> <!-- form-group// -->
-      {{ form.email.errors }}
-      {{ form.non_field_errors }}
-			</form>
-		</article><!-- card-body.// -->
-    </div> <!-- card .// -->
-    <p class="text-center mt-4">Have an account? <a href="{% url 'login' %}">Log In</a></p>
-    <br><br>
-<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+.card-header-modern::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 20px;
+    background: inherit;
+    border-radius: 0 0 50px 50px;
+}
 
+.register-icon {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
 
+.card-title-modern {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+    font-weight: 400;
+}
+
+.card-body-modern {
+    padding: 2.5rem 2rem 2rem;
+}
+
+.modern-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modern-form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.modern-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.modern-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modern-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-weight: 500;
+}
+
+.modern-input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.modern-input.error {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.modern-input.success {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 3.2rem;
+    color: #6b7280;
+    font-size: 1.1rem;
+    z-index: 1;
+    transition: color 0.3s ease;
+}
+
+.modern-input:focus + .input-icon {
+    color: #6366f1;
+}
+
+.modern-btn {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.modern-btn:hover::before {
+    left: 100%;
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+.strength-meter {
+    margin-top: 0.5rem;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.strength-meter.active {
+    opacity: 1;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.form-errors {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 1px solid #f87171;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #991b1b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.bottom-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bottom-link-text {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.bottom-link a {
+    color: #fbbf24;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.bottom-link a:hover {
+    color: #f59e0b;
+    background: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.welcome-message {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    border: 1px solid #a7f3d0;
+}
+
+.welcome-text {
+    color: #065f46;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .register-page {
+        padding: 1rem 0;
+    }
+    
+    .register-container {
+        padding: 0 0.75rem;
+    }
+    
+    .modern-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .card-header-modern {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .card-body-modern {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .register-icon {
+        font-size: 3rem;
+    }
+    
+    .card-title-modern {
+        font-size: 1.75rem;
+    }
+    
+    .modern-input {
+        padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+    }
+    
+    .input-icon {
+        left: 0.875rem;
+        top: 3rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-header-modern {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .card-body-modern {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .register-icon {
+        font-size: 2.5rem;
+    }
+    
+    .card-title-modern {
+        font-size: 1.5rem;
+    }
+}
+
+/* Loading animation for form submission */
+.modern-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.modern-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+<section class="register-page">
+    <div class="register-container">
+        <!-- Modern Registration Card -->
+        <div class="modern-card">
+            <div class="card-header-modern">
+                <div class="register-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h1 class="card-title-modern">Create Account</h1>
+                <p class="card-subtitle">Join us and start your journey today</p>
+            </div>
+            
+            <div class="card-body-modern">
+                <div class="welcome-message">
+                    <p class="welcome-text">
+                        <i class="fas fa-star" style="color: #fbbf24; margin-right: 0.5rem;"></i>
+                        Welcome! Create your account to get started
+                    </p>
+                </div>
+                
+                {% include 'includes/alerts.html' %}
+                
+                <!-- Display form errors -->
+                {% if form.email.errors or form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.email.errors %}
+                        <p><i class="fas fa-exclamation-triangle"></i> {{ error }}</p>
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-triangle"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form action="{% url 'register' %}" method="POST" id="registerForm">
+                    {% csrf_token %}
+                    
+                    <!-- Name Fields -->
+                    <div class="modern-form-row">
+                        <div class="modern-form-group">
+                            <label class="modern-label">First Name</label>
+                            {{ form.first_name|add_class:"modern-input" }}
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="modern-form-group">
+                            <label class="modern-label">Last Name</label>
+                            {{ form.last_name|add_class:"modern-input" }}
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Email and Phone -->
+                    <div class="modern-form-row">
+                        <div class="modern-form-group">
+                            <label class="modern-label">Email Address</label>
+                            {{ form.email|add_class:"modern-input" }}
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="modern-form-group">
+                            <label class="modern-label">Phone Number</label>
+                            {{ form.phone_number|add_class:"modern-input" }}
+                            <i class="fas fa-phone input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Fields -->
+                    <div class="modern-form-row">
+                        <div class="modern-form-group">
+                            <label class="modern-label">Create Password</label>
+                            {{ form.password|add_class:"modern-input" }}
+                            <i class="fas fa-lock input-icon"></i>
+                            <div class="strength-meter" id="strengthMeter">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                        </div>
+                        <div class="modern-form-group">
+                            <label class="modern-label">Confirm Password</label>
+                            {{ form.confirm_password|add_class:"modern-input" }}
+                            <i class="fas fa-lock-open input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="modern-form-group">
+                        <button type="submit" class="modern-btn" id="registerBtn">
+                            <i class="fas fa-user-check" style="margin-right: 0.5rem;"></i>
+                            Create My Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="bottom-link">
+            <p class="bottom-link-text">
+                Already have an account? 
+                <a href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+            </p>
+        </div>
+    </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.querySelector('input[name="password"]');
+    const confirmPasswordInput = document.querySelector('input[name="confirm_password"]');
+    const strengthMeter = document.getElementById('strengthMeter');
+    const strengthFill = document.getElementById('strengthFill');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerForm = document.getElementById('registerForm');
+    
+    // Password strength checker
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/) || password.match(/[^a-zA-Z0-9]+/)) strength += 25;
+            
+            if (password.length > 0) {
+                strengthMeter.classList.add('active');
+                strengthFill.style.width = strength + '%';
+                
+                if (strength < 50) {
+                    strengthFill.style.background = '#ef4444';
+                } else if (strength < 75) {
+                    strengthFill.style.background = '#f59e0b';
+                } else {
+                    strengthFill.style.background = '#22c55e';
+                }
+            } else {
+                strengthMeter.classList.remove('active');
+            }
+        });
+    }
+    
+    // Form submission with loading state
+    registerForm.addEventListener('submit', function() {
+        registerBtn.classList.add('loading');
+        registerBtn.innerHTML = '<span style="opacity: 0;">Create My Account</span>';
+    });
+    
+    // Real-time password matching validation
+    function validatePasswords() {
+        if (!passwordInput || !confirmPasswordInput) return;
+        
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            confirmPasswordInput.classList.add('error');
+            confirmPasswordInput.classList.remove('success');
+        } else if (confirmPassword && password === confirmPassword) {
+            confirmPasswordInput.classList.add('success');
+            confirmPasswordInput.classList.remove('error');
+        } else {
+            confirmPasswordInput.classList.remove('error', 'success');
+        }
+    }
+    
+    if (passwordInput) passwordInput.addEventListener('input', validatePasswords);
+    if (confirmPasswordInput) confirmPasswordInput.addEventListener('input', validatePasswords);
+    
+    // Email validation
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const email = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email && !emailRegex.test(email)) {
+                this.classList.add('error');
+                this.classList.remove('success');
+            } else if (email && emailRegex.test(email)) {
+                this.classList.add('success');
+                this.classList.remove('error');
+            } else {
+                this.classList.remove('error', 'success');
+            }
+        });
+    }
+    
+    // Input focus animations
+    document.querySelectorAll('.modern-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            const icon = this.parentNode.querySelector('.input-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1.1)';
+                icon.style.color = '#6366f1';
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            const icon = this.parentNode.querySelector('.input-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1)';
+                icon.style.color = '#6b7280';
+            }
+        });
+    });
+});
+</script>
 
 {% endblock %}

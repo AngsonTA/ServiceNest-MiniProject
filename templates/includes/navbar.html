@@ -1,94 +1,776 @@
- {% load static %}
+{% load static %}
  
- <header class="section-header">
-<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-<div class="container-fluid">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTop4">
-    <ul class="navbar-nav mr-auto">
-    	<li class="nav-item dropdown">
-		 	<a href="#" class="nav-link">   English </a>
-		    
-		</li>
-		<li class="nav-item dropdown">
-			<a href="#" class="nav-link"> INR </a>
-		</li>
-    </ul>
-    <ul class="navbar-nav">
-		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
-		<li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
-	</ul> <!-- list-inline //  -->
-  </div> <!-- navbar-collapse .// -->
-</div> <!-- container //  -->
-</nav>
+<header class="modern-header">
+    <style>
+        /* Modern Header Styles - 2026 */
+:root {
+    --primary-color: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary-color: #f59e0b;
+    --accent-color: #06b6d4;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-light: #9ca3af;
+    --bg-white: #ffffff;
+    --bg-light: #f8fafc;
+    --bg-overlay: rgba(255, 255, 255, 0.9);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
 
-<section class="header-main border-bottom">
-	<div class="container-fluid">
-<div class="row align-items-center">
-	<div class="col-lg-2 col-md-3 col-6">
-		<a href="{% url 'home' %}" class="brand-wrap">
-			<img class="logo" src="{% static './images/logo.png' %}">
-		</a> <!-- brand-wrap.// -->
-	</div>
-	<div class="col-lg col-sm col-md col-6 flex-grow-0">
-		<div class="category-wrap dropdown d-inline-block float-right">
-			<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"> 
-				<i class="fa fa-bars"></i> All category 
-			</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="{% url 'store' %}">All Products</a>
-				{% for category in links %}
-				<a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
-				{% endfor %}
-			</div>
-		</div>  <!-- category-wrap.// -->
-	</div> <!-- col.// -->
-	<a href="{% url 'store' %}" class="btn btn-outline-warning">Store</a>
-	<div class="col-lg  col-md-6 col-sm-12 col">
-		<form action="{% url 'search' %}" class="search" method='GET'>
-			<div class="input-group w-100">
-			    <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword">
-			    
-			    <div class="input-group-append">
-			      <button class="btn btn-warning" type="submit">
-			        <i class="fa fa-search"></i>
-			      </button>
-			    </div>
-		    </div>
-		</form> <!-- search-wrap .end// -->
-	</div> <!-- col.// -->
-	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-				<div class="d-flex justify-content-end mb-3 mb-lg-0">
-					{% if user.id is None %}
-					<div class="widget-header">
-						<small class="title text-muted">Welcome guest!</small>
-						<div> 
-							<a href="{% url 'login' %}">Sign in</a> <span class="dark-transp"> | </span>
-							<a href="{% url 'register' %}"> Register</a>
-						</div>
-					</div>
-					{% else %}
-						<div class="widget-header">
-						<small class="title text-muted">Welcome {{user.first_name}}</small>
-						<div> 
-							<a href="{% url 'dashboard' %}">Dashboard</a> <span class="dark-transp"> | </span>
-							<a href="{% url 'logout' %}"> Logout</a>
-						</div>
-					</div>
-					{% endif %}
-					<a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
-						<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
-						<span class="badge badge-pill badge-danger notify">{{cart_count}}</span>
-					</a>
-				</div> <!-- widgets-wrap.// -->
-			</div> <!-- col.// -->
-</div> <!-- row.// -->
-	</div> <!-- container.// -->
-</section> <!-- header-main .// -->
+* {
+    box-sizing: border-box;
+}
 
+.modern-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.9) 100%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+}
 
+/* Top Navigation */
+.top-nav {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    padding: 8px 0;
+    font-size: 0.875rem;
+}
 
+.top-nav .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
-</header> <!-- section-header.// -->
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.hamburger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 3px 0;
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+.top-nav-left, .top-nav-right {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+}
+
+.top-nav-right {
+    margin-left: auto;
+}
+
+.top-nav .nav-link {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.top-nav .nav-link:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.top-nav .nav-link i {
+    font-size: 0.875rem;
+}
+
+/* Main Header */
+.main-header {
+    padding: 1rem 0;
+    background: var(--bg-white);
+}
+
+.main-header .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+/* Brand Section */
+.brand-section {
+    flex-shrink: 0;
+}
+
+.brand-link {
+    display: block;
+    transition: var(--transition);
+}
+
+.brand-link:hover {
+    transform: scale(1.05);
+}
+
+/* FIXED: Logo visibility */
+.logo {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    opacity: 1; /* Changed from 0 to 1 */
+    transform: scale(1); /* Changed from scale(0.8) to scale(1) */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Category Section */
+.category-section {
+    position: relative;
+}
+
+.category-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+    min-width: 140px;
+}
+
+.category-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #3730a3 100%);
+}
+
+.category-btn i.fa-chevron-down {
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+.modern-dropdown {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    padding: 0.5rem 0;
+    background: var(--bg-white);
+    backdrop-filter: blur(10px);
+    min-width: 200px;
+    margin-top: 0.5rem;
+}
+
+.modern-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+    border: none;
+    font-weight: 500;
+}
+
+.modern-dropdown .dropdown-item:hover {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+.modern-dropdown .dropdown-item i {
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    width: 16px;
+    text-align: center;
+}
+
+.modern-dropdown .dropdown-item:hover i {
+    color: white;
+}
+
+/* Store Button */
+.store-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #f59e0b 100%);
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+}
+
+.store-btn:hover {
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+}
+
+/* Search Section */
+.search-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    background: var(--bg-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.search-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 0.875rem 1.25rem;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-btn {
+    background: var(--primary-color);
+    border: none;
+    padding: 0.875rem 1.25rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background: var(--primary-dark);
+}
+
+.search-btn i {
+    font-size: 1rem;
+}
+
+/* User & Cart Section */
+.user-cart-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+}
+
+.user-widget {
+    text-align: right;
+}
+
+.welcome-text {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.auth-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--transition);
+}
+
+.auth-link:hover {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.separator {
+    color: var(--text-light);
+    font-size: 0.75rem;
+}
+
+/* Cart Widget */
+.cart-widget {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-light);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.cart-widget:hover {
+    color: var(--text-primary);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--accent-color);
+    color: white;
+}
+
+.cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon i {
+    font-size: 1.25rem;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+}
+
+.cart-text {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* FIXED: Top navigation always visible on desktop */
+.navbar-collapse {
+    display: flex !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .header-content {
+        gap: 1rem;
+    }
+    
+    .search-section {
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 992px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+    
+    .search-section {
+        order: 1;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .user-cart-section {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+    
+    /* FIXED: Better mobile navigation */
+    .navbar-collapse {
+        display: none !important;
+    }
+    
+    .navbar-collapse.show {
+        display: block !important;
+        background: var(--primary-dark);
+        margin-top: 0.5rem;
+        border-radius: var(--border-radius);
+        padding: 1rem;
+    }
+    
+    .top-nav-left, .top-nav-right {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .top-nav-right {
+        margin-left: 0;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .main-header {
+        padding: 0.75rem 0;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .brand-section, .category-section, .store-section {
+        align-self: flex-start;
+    }
+    
+    .user-cart-section {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .user-widget {
+        text-align: left;
+    }
+    
+    .auth-links {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .category-btn, .store-btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .search-container {
+        margin: 0;
+    }
+    
+    .search-input {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .search-btn {
+        padding: 0.75rem 1rem;
+    }
+    
+    .cart-widget {
+        padding: 0.625rem 0.875rem;
+    }
+    
+    .logo {
+        height: 38px;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.modern-header {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Enhanced focus styles for accessibility */
+.category-btn:focus,
+.store-btn:focus,
+.search-btn:focus,
+.auth-link:focus,
+.cart-widget:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+/* Custom scrollbar for dropdown */
+.modern-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modern-dropdown::-webkit-scrollbar-track {
+    background: var(--bg-light);
+    border-radius: 3px;
+}
+
+.modern-dropdown::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.modern-dropdown::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* Dropdown item animations */
+.dropdown-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.dropdown-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.dropdown-item:hover::before {
+    left: 100%;
+}
+    </style>
+    
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <button class="mobile-toggle" type="button" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div class="navbar-collapse" id="navbarTop4">
+                <ul class="top-nav-left">
+                    <li class="nav-item dropdown lang-selector">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-globe"></i> English 
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown currency-selector">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-rupee-sign"></i> INR 
+                        </a>
+                    </li>
+                </ul>
+                <ul class="top-nav-right">
+                    <li class="contact-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-envelope"></i> Email 
+                        </a>
+                    </li>
+                    <li class="contact-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-phone"></i> Call us 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Header Section -->
+    <section class="main-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <!-- Logo Section -->
+                <div class="brand-section">
+                    <a href="{% url 'home' %}" class="brand-link">
+                        <img class="logo" src="{% static './images/logo.png' %}" alt="Logo">
+                    </a>
+                </div>
+
+                <!-- Category Dropdown -->
+                <div class="category-section">
+                    <div class="category-dropdown">
+                        <button type="button" class="category-btn" data-toggle="dropdown"> 
+                            <i class="fas fa-th-large"></i>
+                            <span>Categories</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu modern-dropdown">
+                            <a class="dropdown-item" href="{% url 'store' %}">
+                                <i class="fas fa-shopping-bag"></i>All Products
+                            </a>
+                            {% for category in links %}
+                            <a class="dropdown-item" href="{{ category.get_url }}">
+                                <i class="fas fa-tag"></i>{{ category.category_name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store Button -->
+                <div class="store-section">
+                    <a href="{% url 'store' %}" class="store-btn">
+                        <i class="fas fa-store"></i>
+                        Store
+                    </a>
+                </div>
+
+                <!-- Search Section -->
+                <div class="search-section">
+                    <form action="{% url 'search' %}" class="modern-search" method='GET'>
+                        <div class="search-container">
+                            <input type="text" class="search-input" placeholder="Search for products..." name="keyword">
+                            <button class="search-btn" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- User & Cart Section -->
+                <div class="user-cart-section">
+                    {% if user.id is None %}
+                    <div class="user-widget">
+                        <div class="user-info">
+                            <small class="welcome-text">Welcome!</small>
+                            <div class="auth-links"> 
+                                <a href="{% url 'login' %}" class="auth-link">Sign in</a>
+                                <span class="separator">|</span>
+                                <a href="{% url 'register' %}" class="auth-link">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="user-widget">
+                        <div class="user-info">
+                            <small class="welcome-text">Hello, {{user.first_name}}!</small>
+                            <div class="auth-links"> 
+                                <a href="{% url 'dashboard' %}" class="auth-link">Dashboard</a>
+                                <span class="separator">|</span>
+                                <a href="{% url 'logout' %}" class="auth-link">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <a href="{% url 'cart' %}" class="cart-widget">
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge">{{cart_count}}</span>
+                        </div>
+                        <span class="cart-text">Cart</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // FIXED: Simple mobile toggle function
+        function toggleMobileMenu() {
+            const navbarCollapse = document.getElementById('navbarTop4');
+            navbarCollapse.classList.toggle('show');
+            
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const hamburgerLines = mobileToggle.querySelectorAll('.hamburger-line');
+            const isExpanded = navbarCollapse.classList.contains('show');
+            
+            mobileToggle.setAttribute('aria-expanded', isExpanded);
+            
+            hamburgerLines.forEach((line, index) => {
+                if (isExpanded) {
+                    if (index === 0) line.style.transform = 'rotate(45deg) translateY(8px)';
+                    if (index === 1) line.style.opacity = '0';
+                    if (index === 2) line.style.transform = 'rotate(-45deg) translateY(-8px)';
+                } else {
+                    line.style.transform = 'none';
+                    line.style.opacity = '1';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enhanced search functionality
+            const searchInput = document.querySelector('.search-input');
+            const searchContainer = document.querySelector('.search-container');
+            
+            if (searchInput && searchContainer) {
+                searchInput.addEventListener('focus', function() {
+                    searchContainer.style.transform = 'scale(1.02)';
+                });
+                
+                searchInput.addEventListener('blur', function() {
+                    searchContainer.style.transform = 'scale(1)';
+                });
+            }
+            
+            // Keyboard navigation improvements
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const navbarCollapse = document.getElementById('navbarTop4');
+                    navbarCollapse.classList.remove('show');
+                    
+                    const openDropdowns = document.querySelectorAll('.dropdown-menu.show');
+                    openDropdowns.forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
+            });
+        });
+    </script>
+</header>

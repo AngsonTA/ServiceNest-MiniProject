@@ -1,83 +1,624 @@
 {% extends 'base.html' %}
-
-
+{% load widget_tweaks %}
 {% block content %}
 
-<section class="section-conten padding-y bg">
+<style>
+/* Modern Edit Profile Page Styles */
+.profile-page {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
 
-{% include 'includes/alerts.html' %}
-<div class="container">
-	<div class="row">
-	{% include 'includes/dashboard_sidebar.html' %}
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">Edit your profile</strong>
+.page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
-		</header>
-		<div class="card-body">
-			<div class="text-right">
-				<img src="{{userprofile.profile_picture.url}}" alt="Profile Picture" width="100" style="border-radius:50px;">
-			</div>
-			<div class="row">
-			<div class="col-md-12">
-				<form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-					{% csrf_token %}
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label>First Name</label>
-							{{user_form.first_name}}
-						</div>
-						<div class="form-group col-md-6">
-							<label>Last Name</label>
-							{{user_form.last_name}}
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label>Phone Number</label>
-							{{user_form.phone_number}}
-						</div>
-						<div class="form-group col-md-6">
-							<label>Profile Picture</label>
-							{{profile_form.profile_picture}}
-						</div>
-					</div>
-					<div class="form-group">
-						<label>Address Line 1</label>
-						{{profile_form.address_line_1}}
-					</div>
-					<div class="form-group">
-						<label>Address Line 2</label>
-						{{profile_form.address_line_2}}
-					</div>
-					<div class="form-row">
-						<div class="form-group col-md-4">
-							<label>City</label>
-							{{profile_form.city}}
-						</div>
-						<div class="form-group col-md-4">
-							<label>State</label>
-							{{profile_form.state}}
-						</div>
-						<div class="form-group col-md-4">
-							<label>Country</label>
-							{{profile_form.country}}
-						</div>
-					</div>
-					<input type="submit" value="Save" class="btn btn-primary">
-				</form>
-			</div>
+.main-content {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    animation: slideInUp 0.6s ease-out;
+}
 
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-		</article> <!-- order-group.// -->
-	</main>
-</div> <!-- row.// -->
-</div>
+.modern-card-header {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 2rem 2.5rem;
+    position: relative;
+}
 
+.modern-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
 
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+.header-icon {
+    font-size: 2rem;
+    color: white;
+    opacity: 0.9;
+}
+
+.header-text h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0.25rem 0 0 0;
+}
+
+.modern-card-body {
+    padding: 2.5rem;
+}
+
+.profile-picture-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-picture-container:hover .profile-picture-overlay {
+    opacity: 1;
+}
+
+.overlay-icon {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.form-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.section-icon {
+    font-size: 1.25rem;
+    color: #6366f1;
+}
+
+.modern-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.modern-form-group {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.modern-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.modern-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modern-input, .modern-select, .modern-file-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-weight: 500;
+}
+
+.modern-input:focus, .modern-select:focus, .modern-file-input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-file-input {
+    cursor: pointer;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-style: dashed;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.modern-file-input:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-color: #6366f1;
+}
+
+.file-upload-text {
+    color: #6b7280;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.modern-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.modern-btn:hover::before {
+    left: 100%;
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.cancel-btn {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
+
+.cancel-btn:hover {
+    background: #e5e7eb;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.address-section {
+    margin-top: 2rem;
+}
+
+.three-col-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #93c5fd;
+}
+
+.info-text {
+    color: #1e40af;
+    font-weight: 500;
+    margin: 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-icon {
+    color: #3b82f6;
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .profile-page {
+        padding: 1rem 0;
+    }
+    
+    .page-container {
+        padding: 0 0.5rem;
+    }
+    
+    .modern-card-header {
+        padding: 1.5rem;
+    }
+    
+    .modern-card-body {
+        padding: 1.5rem;
+    }
+    
+    .modern-form-row, .three-col-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+    
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .modern-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .modern-card-header {
+        padding: 1rem;
+    }
+    
+    .modern-card-body {
+        padding: 1rem;
+    }
+    
+    .profile-picture-section {
+        padding: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Loading animation for form submission */
+.modern-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.modern-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+<section class="profile-page">
+    {% include 'includes/alerts.html' %}
+    
+    <div class="page-container">
+        <div class="row">
+            {% include 'includes/dashboard_sidebar.html' %}
+            
+            <main class="col-md-9">
+                <div class="main-content">
+                    <header class="modern-card-header">
+                        <div class="header-content">
+                            <div class="header-title">
+                                <div class="header-icon">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <div class="header-text">
+                                    <h1>Edit Profile</h1>
+                                    <p class="header-subtitle">Update your personal information</p>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="modern-card-body">
+                        <!-- Profile Picture Section -->
+                        <div class="profile-picture-section">
+                            <div class="profile-picture-container">
+                                <img src="{{userprofile.profile_picture.url}}" alt="Profile Picture" class="profile-picture">
+                                <div class="profile-picture-overlay">
+                                    <i class="fas fa-camera overlay-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Info Card -->
+                        <div class="info-card">
+                            <p class="info-text">
+                                <i class="fas fa-info-circle info-icon"></i>
+                                Update your profile information below. All fields are optional except first name.
+                            </p>
+                        </div>
+                        
+                        <!-- Profile Form -->
+                        <div class="form-section">
+                            <h2 class="section-title">
+                                <i class="fas fa-user section-icon"></i>
+                                Personal Information
+                            </h2>
+                            
+                            <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data" id="profileForm">
+                                {% csrf_token %}
+                                
+                                <!-- Basic Info -->
+                                <div class="modern-form-row">
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">First Name</label>
+                                        {{user_form.first_name|add_class:"modern-input"}}
+                                    </div>
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">Last Name</label>
+                                        {{user_form.last_name|add_class:"modern-input"}}
+                                    </div>
+                                </div>
+                                
+                                <div class="modern-form-row">
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">Phone Number</label>
+                                        {{user_form.phone_number|add_class:"modern-input"}}
+                                    </div>
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">Profile Picture</label>
+                                        <div class="modern-file-input">
+                                            {{profile_form.profile_picture}}
+                                            <div class="file-upload-text">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                Choose a new profile picture
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Address Section -->
+                                <div class="address-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-map-marker-alt section-icon"></i>
+                                        Address Information
+                                    </h3>
+                                    
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">Address Line 1</label>
+                                        {{profile_form.address_line_1|add_class:"modern-input"}}
+                                    </div>
+                                    
+                                    <div class="modern-form-group">
+                                        <label class="modern-label">Address Line 2</label>
+                                        {{profile_form.address_line_2|add_class:"modern-input"}}
+                                    </div>
+                                    
+                                    <div class="three-col-row">
+                                        <div class="modern-form-group">
+                                            <label class="modern-label">City</label>
+                                            {{profile_form.city|add_class:"modern-input"}}
+                                        </div>
+                                        <div class="modern-form-group">
+                                            <label class="modern-label">State</label>
+                                            {{profile_form.state|add_class:"modern-input"}}
+                                        </div>
+                                        <div class="modern-form-group">
+                                            <label class="modern-label">Country</label>
+                                            {{profile_form.country|add_class:"modern-input"}}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Form Actions -->
+                                <div class="form-actions">
+                                    <button type="button" class="modern-btn cancel-btn" onclick="history.back()">
+                                        <i class="fas fa-times"></i>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="modern-btn" id="saveBtn">
+                                        <i class="fas fa-save"></i>
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profileForm = document.getElementById('profileForm');
+    const saveBtn = document.getElementById('saveBtn');
+    
+    // Form submission with loading state
+    profileForm.addEventListener('submit', function() {
+        saveBtn.classList.add('loading');
+        saveBtn.innerHTML = '<span style="opacity: 0;"><i class="fas fa-save"></i> Save Changes</span>';
+    });
+    
+    // File input styling
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.style.display = 'none';
+        
+        fileInput.parentNode.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                const fileText = this.parentNode.querySelector('.file-upload-text');
+                if (fileText) {
+                    fileText.innerHTML = `<i class="fas fa-check"></i> ${fileName} selected`;
+                    this.parentNode.style.background = 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)';
+                    this.parentNode.style.borderColor = '#10b981';
+                }
+            }
+        });
+    }
+    
+    // Input focus animations
+    document.querySelectorAll('.modern-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transform = 'translateY(-1px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Profile picture click handler
+    const profilePictureContainer = document.querySelector('.profile-picture-container');
+    if (profilePictureContainer && fileInput) {
+        profilePictureContainer.addEventListener('click', function() {
+            fileInput.click();
+        });
+    }
+});
+</script>
 
 {% endblock %}
